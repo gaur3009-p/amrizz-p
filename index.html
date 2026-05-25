@@ -1,0 +1,1318 @@
+uilt with shadcn/ui, Lenis smooth scrolling, and DaisyUI. This will be a single-file masterpiece designed to make visitors feel the luxury and convert immediately.
+HTML
+Preview
+Copy
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amrizz Perfume — Confidence Begins With The Right Scent</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cinzel': ['Cinzel', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            50: '#fdf9e7',
+                            100: '#f9efc1',
+                            200: '#f3de87',
+                            300: '#ecc84d',
+                            400: '#e5b520',
+                            500: '#d49a16',
+                            600: '#b87a10',
+                            700: '#935c10',
+                            800: '#7a4b15',
+                            900: '#683e18',
+                            950: '#3c1f0b',
+                        },
+                        noir: {
+                            50: '#f6f6f6',
+                            100: '#e7e7e7',
+                            200: '#d1d1d1',
+                            300: '#b0b0b0',
+                            400: '#888888',
+                            500: '#6d6d6d',
+                            600: '#5d5d5d',
+                            700: '#4f4f4f',
+                            800: '#454545',
+                            900: '#1a1a1a',
+                            950: '#0a0a0a',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'spray': 'spray 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(212, 154, 22, 0.3)' },
+                            '50%': { boxShadow: '0 0 40px rgba(212, 154, 22, 0.6)' },
+                        },
+                        spray: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        html { scroll-behavior: auto; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #f6f6f6; overflow-x: hidden; }
+        
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        /* Gold shimmer text */
+        .gold-shimmer {
+            background: linear-gradient(90deg, #d49a16, #f3de87, #d49a16, #f3de87);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+        
+        /* Glass morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-gold {
+            background: rgba(212, 154, 22, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 154, 22, 0.15);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #d49a16; border-radius: 3px; }
+        
+        /* Particle canvas */
+        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.4; }
+        
+        /* Magnetic button */
+        .magnetic-btn { transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+        
+        /* Product card hover */
+        .product-card { transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+        .product-card:hover { transform: translateY(-10px); }
+        .product-card .product-img { transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        
+        /* Stagger reveal */
+        .reveal-text { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+        
+        /* Noise texture overlay */
+        .noise::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        /* WhatsApp pulse */
+        .whatsapp-pulse {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        
+        /* Horizontal scroll section */
+        .horizontal-scroll-container { display: flex; flex-wrap: nowrap; }
+        
+        /* Image mask reveal */
+        .mask-reveal {
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .mask-reveal.revealed { clip-path: inset(0 0 0 0); }
+        
+        /* Scent note orb */
+        .scent-orb {
+            background: radial-gradient(circle at 30% 30%, rgba(212, 154, 22, 0.4), rgba(212, 154, 22, 0.05));
+            box-shadow: 0 0 60px rgba(212, 154, 22, 0.2), inset 0 0 30px rgba(212, 154, 22, 0.1);
+        }
+        
+        /* Input autofill fix */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #f6f6f6;
+            -webkit-box-shadow: 0 0 0px 1000px #1a1a1a inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        /* Custom cursor */
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: #d49a16;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            mix-blend-mode: difference;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(212, 154, 22, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.15s ease-out;
+        }
+        
+        @media (pointer: coarse) {
+            .cursor-dot, .cursor-outline { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-noir-950 text-noir-50 relative">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block" id="cursorDot"></div>
+    <div class="cursor-outline hidden md:block" id="cursorOutline"></div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particles"></canvas>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 translate-y-[-100%]">
+        <div class="glass px-6 lg:px-12 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-noir-950 font-cinzel font-bold text-lg group-hover:scale-110 transition-transform">A</div>
+                    <span class="font-cinzel text-xl font-semibold tracking-wider text-gold-300">AMRIZZ</span>
+                </a>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#collection" class="text-sm tracking-widest uppercase hover:text-gold-400 transition-colors nav-link">Collection</a>
+                    <a href="#story" class="text-sm tracking-widest uppercase hover:text-gold-400 transition-colors nav-link">Our Story</a>
+                    <a href="#notes" class="text-sm tracking-widest uppercase hover:text-gold-400 transition-colors nav-link">Notes</a>
+                    <a href="#contact" class="text-sm tracking-widest uppercase hover:text-gold-400 transition-colors nav-link">Contact</a>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button onclick="openCart()" class="relative p-2 hover:bg-white/5 rounded-full transition-colors">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 bg-gold-500 text-noir-950 text-xs font-bold rounded-full flex items-center justify-center scale-0 transition-transform">0</span>
+                    </button>
+                    <a href="https://www.instagram.com/amrizz_perfume" target="_blank" class="p-2 hover:bg-white/5 rounded-full transition-colors">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="fixed top-4 right-4 z-50 md:hidden p-3 glass rounded-full">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden noise">
+        <!-- Background gradient orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-500/10 rounded-full blur-[120px] animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold-600/10 rounded-full blur-[100px] animate-float" style="animation-delay: -3s;"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center pt-20">
+            <div class="space-y-8">
+                <div class="overflow-hidden">
+                    <p class="text-gold-400 tracking-[0.3em] uppercase text-sm font-medium reveal-text" id="heroSubtitle">Premium Fragrance House</p>
+                </div>
+                
+                <h1 class="font-cinzel text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9]">
+                    <span class="block overflow-hidden"><span class="inline-block reveal-text" id="heroLine1">Perfume That</span></span>
+                    <span class="block overflow-hidden"><span class="inline-block reveal-text gold-shimmer" id="heroLine2">Speaks Your</span></span>
+                    <span class="block overflow-hidden"><span class="inline-block reveal-text" id="heroLine3">Personality</span></span>
+                </h1>
+                
+                <p class="text-noir-300 text-lg md:text-xl max-w-md leading-relaxed font-light" id="heroDesc">
+                    Elevate your aura with scents crafted for the confident. Because confidence begins with the right scent.
+                </p>
+                
+                <div class="flex flex-wrap gap-4" id="heroCta">
+                    <a href="#collection" class="magnetic-btn group relative px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-noir-950 font-semibold tracking-wider uppercase text-sm overflow-hidden rounded-sm">
+                        <span class="relative z-10 flex items-center gap-2">
+                            Explore Collection
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-gold-400 to-gold-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </a>
+                    
+                    <a href="https://wa.me/923101189925?text=Hi%20Amrizz%20Perfume!%20I'm%20interested%20in%20your%20collection.%20Can%20you%20help%20me%20choose%20the%20perfect%20scent?" target="_blank" class="magnetic-btn px-8 py-4 border border-gold-500/30 text-gold-300 font-semibold tracking-wider uppercase text-sm hover:bg-gold-500/10 transition-all rounded-sm flex items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        Order via WhatsApp
+                    </a>
+                </div>
+                
+                <div class="flex items-center gap-8 pt-8 border-t border-white/10" id="heroStats">
+                    <div>
+                        <p class="font-cinzel text-3xl font-bold text-gold-400">33+</p>
+                        <p class="text-xs text-noir-400 uppercase tracking-wider">Curated Scents</p>
+                    </div>
+                    <div class="w-px h-12 bg-white/10"></div>
+                    <div>
+                        <p class="font-cinzel text-3xl font-bold text-gold-400">106+</p>
+                        <p class="text-xs text-noir-400 uppercase tracking-wider">Happy Clients</p>
+                    </div>
+                    <div class="w-px h-12 bg-white/10"></div>
+                    <div>
+                        <p class="font-cinzel text-3xl font-bold text-gold-400">100%</p>
+                        <p class="text-xs text-noir-400 uppercase tracking-wider">Authentic</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relative flex items-center justify-center" id="heroVisual">
+                <div class="relative w-full max-w-md aspect-[3/4]">
+                    <!-- Glow effect behind bottle -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-gold-500/20 via-transparent to-transparent blur-3xl"></div>
+                    
+                    <!-- Main bottle image -->
+                    <div class="relative z-10 animate-float">
+                        <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&h=800&fit=crop&q=80" 
+                             alt="Amrizz Perfume Luxury Bottle" 
+                             class="w-full h-full object-contain drop-shadow-2xl mask-reveal"
+                             id="heroBottle">
+                    </div>
+                    
+                    <!-- Floating scent particles -->
+                    <div class="absolute top-10 right-0 w-20 h-20 scent-orb rounded-full animate-spray opacity-60"></div>
+                    <div class="absolute bottom-20 left-0 w-16 h-16 scent-orb rounded-full animate-spray opacity-40" style="animation-delay: -2s;"></div>
+                    <div class="absolute top-1/2 right-[-20px] w-12 h-12 scent-orb rounded-full animate-spray opacity-50" style="animation-delay: -1s;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+            <span class="text-xs tracking-widest uppercase text-noir-500">Scroll</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-500"></i>
+        </div>
+    </section>
+
+    <!-- Marquee Strip -->
+    <div class="py-6 border-y border-white/5 overflow-hidden bg-noir-900/50">
+        <div class="flex whitespace-nowrap animate-[scroll_20s_linear_infinite]" style="width: max-content;">
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-white/5 mx-8">ELEVATE YOUR AURA</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-gold-500/20 mx-8">•</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-white/5 mx-8">CONFIDENCE IN EVERY DROP</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-gold-500/20 mx-8">•</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-white/5 mx-8">PREMIUM FRAGRANCES</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-gold-500/20 mx-8">•</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-white/5 mx-8">ELEVATE YOUR AURA</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-gold-500/20 mx-8">•</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-white/5 mx-8">CONFIDENCE IN EVERY DROP</span>
+            <span class="text-4xl md:text-6xl font-cinzel font-bold text-gold-500/20 mx-8">•</span>
+        </div>
+    </div>
+    <style>@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }</style>
+
+    <!-- Collection Section -->
+    <section id="collection" class="py-24 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-20 space-y-4">
+                <p class="text-gold-400 tracking-[0.3em] uppercase text-sm">The Collection</p>
+                <h2 class="font-cinzel text-4xl md:text-6xl font-bold">Signature Scents</h2>
+                <p class="text-noir-400 max-w-2xl mx-auto">Each fragrance is a masterpiece, designed to complement your unique personality and leave a lasting impression.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="productGrid">
+                <!-- Product 1 -->
+                <div class="product-card group glass rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Midnight Oud', 4500)">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=625&fit=crop&q=80" 
+                             alt="Midnight Oud" class="product-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir-950 via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute top-4 right-4 glass-gold px-3 py-1 rounded-full">
+                            <span class="text-gold-300 text-xs font-semibold">Bestseller</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            <button class="w-full py-3 bg-gold-500 text-noir-950 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gold-400 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                Add to Cart — Rs. 4,500
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-cinzel text-xl font-semibold">Midnight Oud</h3>
+                        <p class="text-noir-400 text-sm">Rich, woody, mysterious. For the bold soul who commands attention.</p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex gap-1">
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                            </div>
+                            <span class="text-xs text-noir-500">(47 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card group glass rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Golden Aura', 5200)">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=500&h=625&fit=crop&q=80" 
+                             alt="Golden Aura" class="product-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir-950 via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            <button class="w-full py-3 bg-gold-500 text-noir-950 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gold-400 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                Add to Cart — Rs. 5,200
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-cinzel text-xl font-semibold">Golden Aura</h3>
+                        <p class="text-noir-400 text-sm">Warm amber, vanilla, citrus. Radiates luxury and sophistication.</p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex gap-1">
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                            </div>
+                            <span class="text-xs text-noir-500">(38 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card group glass rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Royal Musk', 4800)">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=500&h=625&fit=crop&q=80" 
+                             alt="Royal Musk" class="product-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir-950 via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute top-4 right-4 glass-gold px-3 py-1 rounded-full">
+                            <span class="text-gold-300 text-xs font-semibold">New</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            <button class="w-full py-3 bg-gold-500 text-noir-950 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gold-400 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                Add to Cart — Rs. 4,800
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-cinzel text-xl font-semibold">Royal Musk</h3>
+                        <p class="text-noir-400 text-sm">Clean, sensual, timeless. The scent of quiet confidence.</p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex gap-1">
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400/30"></i>
+                            </div>
+                            <span class="text-xs text-noir-500">(29 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card group glass rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Velvet Rose', 3900)">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1590736969955-71cc94901144?w=500&h=625&fit=crop&q=80" 
+                             alt="Velvet Rose" class="product-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir-950 via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            <button class="w-full py-3 bg-gold-500 text-noir-950 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gold-400 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                Add to Cart — Rs. 3,900
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-cinzel text-xl font-semibold">Velvet Rose</h3>
+                        <p class="text-noir-400 text-sm">Floral, elegant, romantic. For the dreamer with refined taste.</p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex gap-1">
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                            </div>
+                            <span class="text-xs text-noir-500">(52 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card group glass rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Ocean Breeze', 3500)">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1523293188086-b15e4af18e6b?w=500&h=625&fit=crop&q=80" 
+                             alt="Ocean Breeze" class="product-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir-950 via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            <button class="w-full py-3 bg-gold-500 text-noir-950 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gold-400 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                Add to Cart — Rs. 3,500
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-cinzel text-xl font-semibold">Ocean Breeze</h3>
+                        <p class="text-noir-400 text-sm">Fresh, aquatic, invigorating. Capture the essence of freedom.</p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex gap-1">
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400/30"></i>
+                            </div>
+                            <span class="text-xs text-noir-500">(31 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card group glass rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Imperial Spice', 5500)">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?w=500&h=625&fit=crop&q=80" 
+                             alt="Imperial Spice" class="product-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir-950 via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute top-4 right-4 glass-gold px-3 py-1 rounded-full">
+                            <span class="text-gold-300 text-xs font-semibold">Limited</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            <button class="w-full py-3 bg-gold-500 text-noir-950 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gold-400 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                Add to Cart — Rs. 5,500
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <h3 class="font-cinzel text-xl font-semibold">Imperial Spice</h3>
+                        <p class="text-noir-400 text-sm">Exotic, warm, commanding. For those who lead, never follow.</p>
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex gap-1">
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                            </div>
+                            <span class="text-xs text-noir-500">(19 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scent Notes Section -->
+    <section id="notes" class="py-24 lg:py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-noir-950 via-noir-900/50 to-noir-950"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8">
+                    <p class="text-gold-400 tracking-[0.3em] uppercase text-sm">The Alchemy</p>
+                    <h2 class="font-cinzel text-4xl md:text-5xl font-bold leading-tight">Crafted With <br/><span class="gold-shimmer">Precious Ingredients</span></h2>
+                    <p class="text-noir-300 text-lg leading-relaxed">Every Amrizz fragrance is a symphony of carefully selected notes, blended by master perfumers to create an unforgettable olfactory journey.</p>
+                    
+                    <div class="space-y-6 pt-4">
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-full bg-gold-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-gold-500/20 transition-colors">
+                                <i data-lucide="flower-2" class="w-5 h-5 text-gold-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cinzel font-semibold text-lg mb-1">Top Notes</h4>
+                                <p class="text-noir-400 text-sm">Bergamot, Saffron, Pink Pepper — The first impression that captivates instantly.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-full bg-gold-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-gold-500/20 transition-colors">
+                                <i data-lucide="flame" class="w-5 h-5 text-gold-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cinzel font-semibold text-lg mb-1">Heart Notes</h4>
+                                <p class="text-noir-400 text-sm">Oud, Rose Absolute, Jasmine — The soul of the fragrance that unfolds.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-full bg-gold-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-gold-500/20 transition-colors">
+                                <i data-lucide="mountain" class="w-5 h-5 text-gold-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cinzel font-semibold text-lg mb-1">Base Notes</h4>
+                                <p class="text-noir-400 text-sm">Amber, Vanilla, Sandalwood — The lasting memory that lingers for hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="relative aspect-square rounded-3xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=600&h=600&fit=crop&q=80" 
+                             alt="Perfume Ingredients" 
+                             class="w-full h-full object-cover mask-reveal"
+                             id="notesImage">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-noir-950/80 via-transparent to-noir-950/40"></div>
+                    </div>
+                    
+                    <!-- Floating orbs -->
+                    <div class="absolute -top-8 -right-8 w-32 h-32 scent-orb rounded-full animate-float opacity-60"></div>
+                    <div class="absolute -bottom-6 -left-6 w-24 h-24 scent-orb rounded-full animate-float opacity-40" style="animation-delay: -2s;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="py-24 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="glass-gold rounded-3xl p-8 md:p-16 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gold-500/5 rounded-full blur-[100px]"></div>
+                
+                <div class="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 lg:order-1 relative">
+                        <div class="aspect-[4/5] rounded-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=500&h=625&fit=crop&q=80" 
+                                 alt="Amrizz Perfume Story" 
+                                 class="w-full h-full object-cover mask-reveal"
+                                 id="storyImage">
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 glass p-6 rounded-xl max-w-xs hidden md:block">
+                            <p class="font-playfair italic text-gold-300 text-lg">"We don't just sell perfumes. We bottle confidence."</p>
+                        </div>
+                    </div>
+                    
+                    <div class="order-1 lg:order-2 space-y-6">
+                        <p class="text-gold-400 tracking-[0.3em] uppercase text-sm">Our Story</p>
+                        <h2 class="font-cinzel text-4xl md:text-5xl font-bold">Born From a <br/>Passion for <span class="gold-shimmer">Excellence</span></h2>
+                        
+                        <div class="space-y-4 text-noir-300 leading-relaxed">
+                            <p>Amrizz Perfume was founded with a singular vision: to create fragrances that don't just smell good, but transform how you feel about yourself.</p>
+                            <p>Every bottle is a testament to our commitment to quality. We source the finest ingredients from around the world — from the rose fields of Turkey to the oud forests of Southeast Asia.</p>
+                            <p>With 33 curated scents and a growing family of 106+ confident customers, we're not just building a brand. We're building a movement of self-assured individuals who understand that the right scent is the ultimate accessory.</p>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 pt-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-noir-950 font-cinzel font-bold text-2xl">A</div>
+                            <div>
+                                <p class="font-cinzel font-semibold">The Amrizz Family</p>
+                                <p class="text-noir-400 text-sm">Kanpur, Pakistan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials / Social Proof -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 space-y-4">
+                <p class="text-gold-400 tracking-[0.3em] uppercase text-sm">Testimonials</p>
+                <h2 class="font-cinzel text-4xl md:text-5xl font-bold">What Our Clients Say</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass p-8 rounded-2xl space-y-4 hover:border-gold-500/20 transition-colors border border-transparent">
+                    <div class="flex gap-1">
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                    </div>
+                    <p class="text-noir-300 italic font-playfair">"Midnight Oud is absolutely intoxicating. I've never received so many compliments. Amrizz has become my signature scent."</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="w-10 h-10 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-300 font-semibold">A</div>
+                        <div>
+                            <p class="font-semibold text-sm">Ahmed R.</p>
+                            <p class="text-xs text-noir-500">Lahore</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl space-y-4 hover:border-gold-500/20 transition-colors border border-transparent">
+                    <div class="flex gap-1">
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                    </div>
+                    <p class="text-noir-300 italic font-playfair">"The quality is unbelievable for the price. Golden Aura lasts all day. Fast delivery and amazing customer service via WhatsApp!"</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="w-10 h-10 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-300 font-semibold">S</div>
+                        <div>
+                            <p class="font-semibold text-sm">Sarah K.</p>
+                            <p class="text-xs text-noir-500">Karachi</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl space-y-4 hover:border-gold-500/20 transition-colors border border-transparent">
+                    <div class="flex gap-1">
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-gold-400 fill-gold-400"></i>
+                    </div>
+                    <p class="text-noir-300 italic font-playfair">"Bought Imperial Spice as a gift for my husband. He loved it so much, he ordered two more bottles. Truly premium quality."</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="w-10 h-10 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-300 font-semibold">F</div>
+                        <div>
+                            <p class="font-semibold text-sm">Fatima Z.</p>
+                            <p class="text-xs text-noir-500">Islamabad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Order Section -->
+    <section id="contact" class="py-24 lg:py-32 relative">
+        <div class="max-w-4xl mx-auto px-6 lg:px-12">
+            <div class="glass-gold rounded-3xl p-8 md:p-12 space-y-8 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
+                
+                <div class="text-center space-y-4">
+                    <p class="text-gold-400 tracking-[0.3em] uppercase text-sm">Get In Touch</p>
+                    <h2 class="font-cinzel text-4xl md:text-5xl font-bold">Ready to Elevate<br/>Your Aura?</h2>
+                    <p class="text-noir-400 max-w-lg mx-auto">Order directly via WhatsApp for fastest response, or send us a message and we'll help you find your perfect scent.</p>
+                </div>
+                
+                <form id="orderForm" class="space-y-6" onsubmit="handleOrder(event)">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-sm text-noir-400 uppercase tracking-wider">Your Name</label>
+                            <input type="text" required placeholder="Enter your name" 
+                                   class="w-full px-4 py-3 bg-noir-900/50 border border-white/10 rounded-lg focus:border-gold-500/50 focus:outline-none focus:ring-1 focus:ring-gold-500/50 transition-all text-noir-100 placeholder:text-noir-600">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm text-noir-400 uppercase tracking-wider">Phone Number</label>
+                            <input type="tel" required placeholder="+92 3XX XXXXXXX" 
+                                   class="w-full px-4 py-3 bg-noir-900/50 border border-white/10 rounded-lg focus:border-gold-500/50 focus:outline-none focus:ring-1 focus:ring-gold-500/50 transition-all text-noir-100 placeholder:text-noir-600">
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm text-noir-400 uppercase tracking-wider">Select Fragrance</label>
+                        <select id="fragranceSelect" class="w-full px-4 py-3 bg-noir-900/50 border border-white/10 rounded-lg focus:border-gold-500/50 focus:outline-none focus:ring-1 focus:ring-gold-500/50 transition-all text-noir-100">
+                            <option value="">Choose your scent...</option>
+                            <option value="Midnight Oud">Midnight Oud — Rs. 4,500</option>
+                            <option value="Golden Aura">Golden Aura — Rs. 5,200</option>
+                            <option value="Royal Musk">Royal Musk — Rs. 4,800</option>
+                            <option value="Velvet Rose">Velvet Rose — Rs. 3,900</option>
+                            <option value="Ocean Breeze">Ocean Breeze — Rs. 3,500</option>
+                            <option value="Imperial Spice">Imperial Spice — Rs. 5,500</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm text-noir-400 uppercase tracking-wider">Message (Optional)</label>
+                        <textarea rows="3" placeholder="Any specific preferences or questions..." 
+                                  class="w-full px-4 py-3 bg-noir-900/50 border border-white/10 rounded-lg focus:border-gold-500/50 focus:outline-none focus:ring-1 focus:ring-gold-500/50 transition-all text-noir-100 placeholder:text-noir-600 resize-none"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-noir-950 font-bold tracking-wider uppercase rounded-lg hover:from-gold-400 hover:to-gold-500 transition-all flex items-center justify-center gap-2 group">
+                        <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        Send Order via WhatsApp
+                    </button>
+                </form>
+                
+                <div class="flex items-center justify-center gap-6 pt-4">
+                    <div class="h-px bg-white/10 flex-1"></div>
+                    <span class="text-noir-500 text-sm">or</span>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+                
+                <a href="https://wa.me/923101189925?text=Hi%20Amrizz%20Perfume!" target="_blank" 
+                   class="flex items-center justify-center gap-3 py-4 border border-green-500/30 text-green-400 rounded-lg hover:bg-green-500/10 transition-all font-semibold">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    Chat Directly on WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-16 bg-noir-950">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-noir-950 font-cinzel font-bold text-lg">A</div>
+                        <span class="font-cinzel text-xl font-semibold tracking-wider text-gold-300">AMRIZZ</span>
+                    </div>
+                    <p class="text-noir-400 text-sm leading-relaxed">Perfume that speaks your personality & elevates your aura. Confidence begins with the right scent.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-cinzel font-semibold mb-4 text-gold-300">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-noir-400">
+                        <li><a href="#collection" class="hover:text-gold-400 transition-colors">Collection</a></li>
+                        <li><a href="#story" class="hover:text-gold-400 transition-colors">Our Story</a></li>
+                        <li><a href="#notes" class="hover:text-gold-400 transition-colors">Notes</a></li>
+                        <li><a href="#contact" class="hover:text-gold-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-cinzel font-semibold mb-4 text-gold-300">Contact</h4>
+                    <ul class="space-y-2 text-sm text-noir-400">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4 text-gold-500"></i>
+                            +92 310 118 9925
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-gold-500"></i>
+                            Kanpur, Pakistan
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-cinzel font-semibold mb-4 text-gold-300">Follow Us</h4>
+                    <div class="flex gap-3">
+                        <a href="https://www.instagram.com/amrizz_perfume" target="_blank" 
+                           class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-gold-500/20 transition-colors">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://wa.me/923101189925" target="_blank" 
+                           class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-green-500/20 hover:text-green-400 transition-colors">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    <p class="text-xs text-noir-500 mt-4">33 posts • 106 followers</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-noir-600 text-sm"> 2026 Amrizz Perfume. All rights reserved.</p>
+                <p class="text-noir-600 text-sm">Crafted with passion in Kanpur, Pakistan</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/923101189925?text=Hi%20Amrizz%20Perfume!%20I'm%20interested%20in%20ordering%20a%20perfume." 
+       target="_blank"
+       class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 whatsapp-pulse hover:scale-110 transition-transform group"
+       id="whatsappFloat">
+        <i data-lucide="message-circle" class="w-7 h-7 text-white"></i>
+        <span class="absolute right-full mr-3 bg-noir-900 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity border border-white/10">
+            Order on WhatsApp
+        </span>
+    </a>
+
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-[60] pointer-events-none opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCart()"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-noir-950 border-l border-white/10 transform translate-x-full transition-transform duration-500 pointer-events-auto" id="cartPanel">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="font-cinzel text-2xl font-bold">Your Cart</h3>
+                    <button onclick="closeCart()" class="p-2 hover:bg-white/5 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                
+                <div id="cartItems" class="flex-1 overflow-y-auto space-y-4">
+                    <div class="text-center text-noir-500 py-12">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-4 opacity-30"></i>
+                        <p>Your cart is empty</p>
+                        <a href="#collection" onclick="closeCart()" class="text-gold-400 text-sm hover:underline mt-2 inline-block">Browse Collection</a>
+                    </div>
+                </div>
+                
+                <div class="border-t border-white/10 pt-6 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-noir-400">Total</span>
+                        <span id="cartTotal" class="font-cinzel text-2xl font-bold text-gold-400">Rs. 0</span>
+                    </div>
+                    <a href="https://wa.me/923101189925?text=Hi%20Amrizz%20Perfume!%20I%20want%20to%20place%20an%20order." target="_blank"
+                       class="block w-full py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-noir-950 font-bold text-center rounded-lg hover:from-gold-400 hover:to-gold-500 transition-all">
+                        Checkout via WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] transform translate-y-20 opacity-0 transition-all duration-500">
+        <div class="glass-gold px-6 py-3 rounded-full flex items-center gap-3">
+            <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+            <span id="toastMessage" class="text-sm font-medium">Added to cart!</span>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            wheelMultiplier: 1,
+        });
+        
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        
+        // GSAP ScrollTrigger integration with Lenis
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+        
+        // Custom Cursor
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorOutline = document.getElementById('cursorOutline');
+        
+        if (window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+                
+                cursorOutline.animate({
+                    left: e.clientX + 'px',
+                    top: e.clientY + 'px'
+                }, { duration: 500, fill: 'forwards' });
+            });
+            
+            document.querySelectorAll('a, button, .product-card').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    cursorOutline.style.borderColor = 'rgba(212, 154, 22, 0.8)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursorOutline.style.borderColor = 'rgba(212, 154, 22, 0.5)';
+                });
+            });
+        }
+        
+        // Navbar show/hide on scroll
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+        
+        lenis.on('scroll', ({ scroll }) => {
+            if (scroll > 100) {
+                navbar.style.transform = 'translateY(0)';
+            } else {
+                navbar.style.transform = 'translateY(-100%)';
+            }
+            lastScroll = scroll;
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) lenis.scrollTo(target);
+            });
+        });
+        
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Hero entrance animations
+        const heroTl = gsap.timeline({ delay: 0.3 });
+        heroTl.to('#heroSubtitle', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' })
+              .to('#heroLine1', { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.4')
+              .to('#heroLine2', { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.6')
+              .to('#heroLine3', { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.6')
+              .to('#heroDesc', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+              .to('#heroCta', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+              .to('#heroStats', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+              .to('#heroBottle', { 
+                  clipPath: 'inset(0 0 0 0)', 
+                  duration: 1.5, 
+                  ease: 'power3.inOut' 
+              }, '-=1.2');
+        
+        // Set initial states
+        gsap.set('#heroSubtitle, #heroLine1, #heroLine2, #heroLine3, #heroDesc, #heroCta, #heroStats', { y: 50, opacity: 0 });
+        
+        // Scroll-triggered reveals
+        gsap.utils.toArray('.mask-reveal').forEach(el => {
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top 80%',
+                onEnter: () => el.classList.add('revealed'),
+                once: true
+            });
+        });
+        
+        // Product cards stagger
+        gsap.from('.product-card', {
+            scrollTrigger: {
+                trigger: '#productGrid',
+                start: 'top 80%',
+            },
+            y: 60,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out'
+        });
+        
+        // Parallax for hero visual
+        gsap.to('#heroVisual', {
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            },
+            y: 100,
+            ease: 'none'
+        });
+        
+        // Particle System
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.life = Math.random() * 100 + 100;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life--;
+                
+                if (this.life <= 0 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 154, 22, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+        
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+        
+        // Cart Logic
+        let cart = [];
+        
+        function addToCart(name, price) {
+            const existing = cart.find(item => item.name === name);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ name, price, qty: 1 });
+            }
+            updateCart();
+            showToast(`${name} added to cart!`);
+        }
+        
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+        
+        function updateCart() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            cartCount.textContent = totalItems;
+            if (totalItems > 0) {
+                cartCount.style.transform = 'scale(1)';
+            } else {
+                cartCount.style.transform = 'scale(0)';
+            }
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center text-noir-500 py-12">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-4 opacity-30"></i>
+                        <p>Your cart is empty</p>
+                        <a href="#collection" onclick="closeCart()" class="text-gold-400 text-sm hover:underline mt-2 inline-block">Browse Collection</a>
+                    </div>
+                `;
+            } else {
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="flex items-center gap-4 p-4 glass rounded-xl">
+                        <div class="w-12 h-12 rounded-lg bg-gold-500/10 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="droplets" class="w-5 h-5 text-gold-400"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-semibold text-sm truncate">${item.name}</h4>
+                            <p class="text-noir-500 text-xs">Rs. ${item.price.toLocaleString()} × ${item.qty}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-cinzel font-bold text-gold-400">Rs. ${(item.price * item.qty).toLocaleString()}</span>
+                            <button onclick="removeFromCart(${index})" class="p-1.5 hover:bg-red-500/20 hover:text-red-400 rounded-full transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            cartTotal.textContent = `Rs. ${totalPrice.toLocaleString()}`;
+            lucide.createIcons();
+        }
+        
+        function openCart() {
+            const drawer = document.getElementById('cartDrawer');
+            const panel = document.getElementById('cartPanel');
+            drawer.classList.remove('pointer-events-none', 'opacity-0');
+            drawer.classList.add('pointer-events-auto', 'opacity-100');
+            panel.style.transform = 'translateX(0)';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeCart() {
+            const drawer = document.getElementById('cartDrawer');
+            const panel = document.getElementById('cartPanel');
+            drawer.classList.add('pointer-events-none', 'opacity-0');
+            drawer.classList.remove('pointer-events-auto', 'opacity-100');
+            panel.style.transform = 'translateX(100%)';
+            document.body.style.overflow = '';
+        }
+        
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.style.transform = 'translateY(0) translateX(-50%)';
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(20px) translateX(-50%)';
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+        
+        // Form to WhatsApp
+        function handleOrder(e) {
+            e.preventDefault();
+            const form = e.target;
+            const name = form.querySelector('input[type="text"]').value;
+            const phone = form.querySelector('input[type="tel"]').value;
+            const fragrance = document.getElementById('fragranceSelect').value;
+            const message = form.querySelector('textarea').value;
+            
+            let text = `Hi Amrizz Perfume!%0A%0A`;
+            text += `*Name:* ${name}%0A`;
+            text += `*Phone:* ${phone}%0A`;
+            if (fragrance) text += `*Fragrance:* ${fragrance}%0A`;
+            if (message) text += `*Message:* ${message}%0A`;
+            
+            if (cart.length > 0) {
+                text += `%0A*Cart Items:*%0A`;
+                cart.forEach(item => {
+                    text += `• ${item.name} × ${item.qty} — Rs. ${(item.price * item.qty).toLocaleString()}%0A`;
+                });
+                const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                text += `%0A*Total:* Rs. ${total.toLocaleString()}`;
+            }
+            
+            window.open(`https://wa.me/923101189925?text=${text}`, '_blank');
+        }
+        
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        let mobileMenuOpen = false;
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            if (!mobileMenuOpen) {
+                const menu = document.createElement('div');
+                menu.id = 'mobileMenu';
+                menu.className = 'fixed inset-0 z-40 bg-noir-950/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8';
+                menu.innerHTML = `
+                    <a href="#collection" onclick="closeMobileMenu()" class="font-cinzel text-2xl hover:text-gold-400 transition-colors">Collection</a>
+                    <a href="#story" onclick="closeMobileMenu()" class="font-cinzel text-2xl hover:text-gold-400 transition-colors">Our Story</a>
+                    <a href="#notes" onclick="closeMobileMenu()" class="font-cinzel text-2xl hover:text-gold-400 transition-colors">Notes</a>
+                    <a href="#contact" onclick="closeMobileMenu()" class="font-cinzel text-2xl hover:text-gold-400 transition-colors">Contact</a>
+                    <a href="https://wa.me/923101189925" target="_blank" class="mt-4 px-8 py-3 bg-gold-500 text-noir-950 font-bold rounded-lg">Order on WhatsApp</a>
+                `;
+                document.body.appendChild(menu);
+                mobileMenuBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+                lucide.createIcons();
+                mobileMenuOpen = true;
+                document.body.style.overflow = 'hidden';
+            } else {
+                closeMobileMenu();
+            }
+        });
+        
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.remove();
+            mobileMenuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
+            lucide.createIcons();
+            mobileMenuOpen = false;
+            document.body.style.overflow = '';
+        }
+        
+        // Magnetic Button Effect
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+        
+        // WhatsApp Float Button Visibility
+        const whatsappFloat = document.getElementById('whatsappFloat');
+        lenis.on('scroll', ({ scroll }) => {
+            if (scroll > 300) {
+                whatsappFloat.style.opacity = '1';
+                whatsappFloat.style.pointerEvents = 'auto';
+            } else {
+                whatsappFloat.style.opacity = '0';
+                whatsappFloat.style.pointerEvents = 'none';
+            }
+        });
+        whatsappFloat.style.opacity = '0';
+        whatsappFloat.style.pointerEvents = 'none';
+        whatsappFloat.style.transition = 'opacity 0.3s, transform 0.3s';
+        
+        // Preloader (optional enhancement)
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+        
+        // Keyboard accessibility for cart
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCart();
+                closeMobileMenu();
+            }
+        });
+        
+        // Intersection Observer for scroll animations fallback
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.product-card, .glass').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+        
+    </script>
+</body>
+</html>
